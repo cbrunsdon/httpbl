@@ -32,7 +32,7 @@ class HttpBL
                 }.merge(options)
     raise "Missing :api_key for Http:BL middleware" unless @options[:api_key]
     if @options[:memcached_server]
-      require 'memcache'
+      require 'dalli'
       @cache = Dalli::Client.new(@options[:memcached_server], @options[:memcached_options])
     end
   end
