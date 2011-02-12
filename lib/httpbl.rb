@@ -2,6 +2,22 @@
 
 class HttpBL
   autoload :Resolv, 'resolv'
+  
+  def self.encourage_safe_timeouts
+    if /^1\.8/ =~ RUBY_VERSION 
+      begin
+        require 'system_timer'
+        @@DnsTimeout = SystemTimer
+      rescue LoadError
+        require 'timeout'
+        @@DnsTimeout = Timeout
+      end
+    else
+      require 'timeout'
+      @@DnsTimeout = Timeout
+    end
+  end
+  
   encourage_safe_timeouts
 
   def initialize(app, options = {})
@@ -71,19 +87,5 @@ class HttpBL
 
 private
 
-  def self.encourage_safe_timeouts
-    if /^1\.8/ =~ RUBY_VERSION 
-      begin
-        require 'system_timer'
-        @@DnsTimeout = SystemTimer
-      rescue LoadError
-        require 'timeout'
-        @@DnsTimeout = Timeout
-      end
-    else
-      require 'timeout'
-      @@DnsTimeout = Timeout
-    end
-  end
 
 end
