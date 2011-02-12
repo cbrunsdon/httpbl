@@ -17,7 +17,7 @@ class HttpBL
     raise "Missing :api_key for Http:BL middleware" unless @options[:api_key]
     if @options[:memcached_server]
       require 'memcache'
-      @cache = MemCache.new(@options[:memcached_server], @options[:memcached_options])
+      @cache = Dalli::Client.new(@options[:memcached_server], @options[:memcached_options])
     end
   end
   
